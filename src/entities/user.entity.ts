@@ -1,7 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryGeneratedColumn,
+  Index,
+} from 'typeorm';
 
-@Entity('user')
-export class User {
+import { Exclude, Expose } from 'class-transformer';
+
+@Entity({ name: 'user' })
+@Index('idx_email', ['email'], { unique: true })
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,8 +21,14 @@ export class User {
   lastName: string;
 
   @Column()
-  username: string;
+  userName: string;
 
+  @Column('varchar', {
+    length: 15,
+  })
+  role: String;
+
+  @Exclude()
   @Column()
   password: string;
 
