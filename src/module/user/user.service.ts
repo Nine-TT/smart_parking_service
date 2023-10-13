@@ -19,11 +19,6 @@ export class UserService {
     return hash;
   }
 
-  getUsers(requestData: CreateUserDTO): any {
-    console.log(requestData);
-    return 'Get ALL USER';
-  }
-
   async createUser(requestData: CreateUserDTO): Promise<any> {
     const existingRecord = await this.userRepository.find({
       where: [{ userName: requestData.userName }, { email: requestData.email }],
@@ -53,7 +48,7 @@ export class UserService {
     return response;
   }
 
-  async updateUser(responseData: CreateUserDTO, id: number) {
+  async updateUser(responseData: CreateUserDTO, id: number): Promise<number> {
     const user = await this.userRepository.findOneBy({
       id,
     });
@@ -71,7 +66,7 @@ export class UserService {
     return response.affected;
   }
 
-  async deleteUSerById(ids: number | number[]) {
+  async deleteUSerById(ids: number | number[]): Promise<number> {
     const userIds = Array.isArray(ids) ? ids : [ids];
 
     const deleteResult = await this.userRepository.delete(userIds);
@@ -80,7 +75,7 @@ export class UserService {
     return deletedCount;
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: number): Promise<User | 0> {
     const user = await this.userRepository.findOneBy({
       id,
     });
@@ -92,7 +87,7 @@ export class UserService {
     }
   }
 
-  async getUsersWithCount(page: number, pageSize: number) {
+  async getUsersWithCount(page: number, pageSize: number): Promise<User[]> {
     const skip = (page - 1) * pageSize;
 
     // Sử dụng findAndCount để lấy danh sách người dùng và tổng số bản ghi

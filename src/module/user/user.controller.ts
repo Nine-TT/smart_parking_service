@@ -7,10 +7,13 @@ import {
   Put,
   Param,
   Delete,
-  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from 'src/dto/user.dto';
+import { RolesGuard } from 'src/middleware/roles.guard';
+import { AuthGuard } from 'src/middleware/auth.guard';
+import { Roles } from 'src/constants';
 
 @Controller('user')
 export class UserController {
@@ -39,7 +42,13 @@ export class UserController {
   }
 
   @Put('/update/:id')
-  async updateUser(@Body() createUserDTO: CreateUserDTO, @Param() params: any) {
+  async updateUser(
+    @Body() createUserDTO: CreateUserDTO,
+    @Param() params: any,
+  ): Promise<{
+    statusCode: HttpStatus;
+    message: string;
+  }> {
     try {
       let userID = Number(params.id);
       const response = await this.userService.updateUser(createUserDTO, userID);
@@ -61,7 +70,10 @@ export class UserController {
   }
 
   @Delete('/delete/:ids')
-  async deleteUser(@Param('ids') ids: string) {
+  async deleteUser(@Param('ids') ids: string): Promise<{
+    statusCode: HttpStatus;
+    message: string;
+  }> {
     try {
       const idArray = ids.split(',').map((id) => parseInt(id, 10));
 
@@ -79,6 +91,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Get('/id/:id')
   async getUserById(@Param('id') id: any) {
     try {
@@ -103,6 +116,9 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard) // check token
+  @UseGuards(RolesGuard) // check role
+  @Roles('Admin')
   @Get('/all')
   async getAllUsers(@Body() body: { page: number; pageSize: number }) {
     try {
