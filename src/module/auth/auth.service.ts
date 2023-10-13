@@ -3,7 +3,7 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDTO, LoginDTO } from 'src/dto/user.dto';
 import * as bcrypt from 'bcrypt';
-import { salt_Rounds } from 'src/constant';
+import { salt_Rounds } from 'src/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 

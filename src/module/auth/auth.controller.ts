@@ -33,8 +33,6 @@ export class AuthController {
   @Post('/login')
   async login(@Body() loginDTO: LoginDTO) {
     try {
-      console.log(loginDTO);
-
       let response = await this.authService.login(loginDTO);
 
       if (response === 1) {
