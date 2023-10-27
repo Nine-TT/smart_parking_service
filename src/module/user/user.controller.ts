@@ -9,17 +9,20 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBody, ApiTags, ApiParam } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDTO } from 'src/dto/user.dto';
 import { RolesGuard } from 'src/middleware/roles.guard';
 import { AuthGuard } from 'src/middleware/auth.guard';
 import { Roles } from 'src/constants';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/create')
+  @ApiBody({ type: CreateUserDTO })
   async createUSer(@Body() createUSerDTO: CreateUserDTO) {
     try {
       const response = await this.userService.createUser(createUSerDTO);
@@ -41,7 +44,8 @@ export class UserController {
     }
   }
 
-  @Put('/update/:id')
+  @Put('/:id')
+  @ApiParam({ name: 'id', type: 'number' })
   async updateUser(
     @Body() createUserDTO: CreateUserDTO,
     @Param() params: any,
@@ -69,7 +73,8 @@ export class UserController {
     }
   }
 
-  @Delete('/delete/:ids')
+  @ApiParam({ name: 'ids', type: 'string' })
+  @Delete('/:ids')
   async deleteUser(@Param('ids') ids: string): Promise<{
     statusCode: HttpStatus;
     message: string;
@@ -91,8 +96,9 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @Get('/id/:id')
+  // @UseGuards(AuthGuard)
+  @Get('/:id')
+  @ApiParam({ name: 'id', type: 'number' })
   async getUserById(@Param('id') id: any) {
     try {
       let idInt = Number(id);

@@ -2,12 +2,15 @@ import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from 'src/dto/user.dto';
 import { LoginDTO } from 'src/dto/user.dto';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/register')
+  @ApiBody({ type: CreateUserDTO })
   async register(@Body() createUSerDTO: CreateUserDTO) {
     try {
       const response = await this.authService.signIn(createUSerDTO);
@@ -31,6 +34,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @ApiBody({ type: LoginDTO })
   async login(@Body() loginDTO: LoginDTO) {
     try {
       let response = await this.authService.login(loginDTO);

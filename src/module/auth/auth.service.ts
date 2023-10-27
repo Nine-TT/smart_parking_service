@@ -55,8 +55,6 @@ export class AuthService {
     newUser.password = await this.hashPassword(requestData.password);
     newUser.role = 'User';
 
-    console.log('Role: ', newUser.role);
-
     const response = await this.userRepository.save(newUser);
 
     const access_token = this.generateAccessToken(
