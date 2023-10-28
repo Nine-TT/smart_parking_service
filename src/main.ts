@@ -14,19 +14,12 @@ async function bootstrap() {
       'A smart parking service utilizes technology to efficiently manage and optimize parking spaces, enhancing convenience and reducing congestion.',
     )
     .setVersion('1.0')
-    .addTag('test')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'JWT Token',
-      },
-      'Authorization',
-    )
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);
+
+  app.setGlobalPrefix('api/v1');
 
   app.enableCors();
 
