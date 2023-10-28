@@ -15,7 +15,7 @@ export class Card {
   @Column()
   expirationDate: Date;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { cascade: ['remove'] })
   @JoinColumn({ name: 'id' })
   user: User;
 }

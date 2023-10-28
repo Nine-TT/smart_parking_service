@@ -6,7 +6,7 @@ export class VehicleManagement {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
-  @ManyToOne(() => Card)
+  @ManyToOne(() => Card, { cascade: ['remove'] })
   @JoinColumn({ name: 'card', referencedColumnName: 'id' })
   card: string;
 

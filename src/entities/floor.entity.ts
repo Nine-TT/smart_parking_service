@@ -15,7 +15,7 @@ export class Floor {
   @Column()
   name: string;
 
-  @ManyToOne(() => ParkingLot)
+  @ManyToOne(() => ParkingLot, { cascade: ['remove'] })
   @JoinColumn({ name: 'parking_lot_id', referencedColumnName: 'id' })
   parkingLot: number;
 }

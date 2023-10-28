@@ -21,14 +21,14 @@ export class ParkingLocation {
   @Column()
   floor: number;
 
-  @ManyToOne(() => ParkingLot)
+  @ManyToOne(() => ParkingLot, { cascade: ['remove'] })
   @JoinColumn({ name: 'parking_lot_id', referencedColumnName: 'id' })
   parking: number;
 
   @Column()
   state: string;
 
-  @OneToOne(() => VehicleManagement)
+  @OneToOne(() => VehicleManagement, { cascade: ['remove'] })
   @JoinColumn({ name: 'id' })
   vehicle: VehicleManagement;
 }
