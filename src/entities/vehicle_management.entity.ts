@@ -14,7 +14,7 @@ export class VehicleManagement {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Card)
+  @ManyToOne(() => Card, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'card' })
   card: Card;
 
