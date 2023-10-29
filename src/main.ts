@@ -6,6 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('api/v1');
 
   // swagger
   const config = new DocumentBuilder()
@@ -14,18 +15,10 @@ async function bootstrap() {
       'A smart parking service utilizes technology to efficiently manage and optimize parking spaces, enhancing convenience and reducing congestion.',
     )
     .setVersion('1.0')
-    .addTag('test')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'JWT Token',
-      },
-      'Authorization',
-    )
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
+
   SwaggerModule.setup('/', app, document);
 
   app.enableCors();

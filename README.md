@@ -52,4 +52,4 @@ Nest is [MIT licensed](LICENSE).
 
 ## Authors
 
-- [@NineTT](https://www.facebook.com/chin.tt.1509)
+- [@NineTT](https://www.facebook.com/cizh.tt)

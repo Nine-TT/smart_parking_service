@@ -1,27 +1,48 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Card } from './card.entity';
 
 @Entity('vehiclemanagement')
 export class VehicleManagement {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Card)
-  @JoinColumn({ name: 'card', referencedColumnName: 'id' })
-  card: string;
+  @ManyToOne(() => Card, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'card' })
+  card: Card;
 
-  @Column()
+  @Column({ type: 'datetime' })
   timeIn: Date;
 
-  @Column()
+  @Column({ type: 'datetime', nullable: true })
   timeOut: Date;
 
   @Column()
   licensePlates: string;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   parkingFee: number;
 
   @Column()
   state: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { userRole } from 'src/constants';
 
 const saltRounds = 10;
 
@@ -35,16 +36,11 @@ export class UserService {
     // Tạo một bản sao của requestData để tránh thay đổi dữ liệu gốc
     const newUser = { ...requestData };
 
-    // Hash mật khẩu trước khi lưu vào cơ sở dữ liệu
     newUser.password = await this.hashPassword(requestData.password);
-    newUser.role = newUser.role ? newUser.role : 'User';
+    newUser.role = newUser.role ? newUser.role : userRole.user;
 
-    console.log(typeof newUser.password);
-
-    // Lưu người dùng mới vào cơ sở dữ liệu
     const response = await this.userRepository.save(newUser);
 
-    // Trả về đối tượng User nguyên bản đã lưu vào cơ sở dữ liệu, không bao gồm password
     return response;
   }
 
@@ -87,9 +83,8 @@ export class UserService {
     }
   }
 
-  async getUsersWithCount(page: number, pageSize: number): Promise<User[]> {
+  async getUsersWithCount({ page, pageSize }): Promise<User[]> {
     const skip = (page - 1) * pageSize;
-
     // Sử dụng findAndCount để lấy danh sách người dùng và tổng số bản ghi
     const [users, count] = await this.userRepository.findAndCount({
       skip,

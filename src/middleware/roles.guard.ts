@@ -12,7 +12,7 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.get<string[]>(
-      'roles',
+      'role',
       context.getHandler(),
     );
 
@@ -22,6 +22,8 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const payload = request.user; // Giả sử user đã được gán bởi AuthGuard.
+
+    console.log(request);
 
     if (!payload || !payload.role) {
       throw new UnauthorizedException('Invalid user or role');

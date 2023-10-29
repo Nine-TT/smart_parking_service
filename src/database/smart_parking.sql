@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `floor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `floor` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `parkingLot` int DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS `parkinglot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `parkinglot` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -133,7 +133,7 @@ DROP TABLE IF EXISTS `revenue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `revenue` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `expense` int NOT NULL,
   `date` datetime NOT NULL,
@@ -174,12 +174,6 @@ CREATE TABLE `user` (
 --
 -- Dumping data for table `user`
 --
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (27,'Chin','Tan Tan','ttc@123.com','0987654321','$2b$10$ByoACSxwZ8znz3Pi3vM/Le6wvZoBPsYwletPcMGUKMmzy2rYKCuMG','chinqbhg123','User'),(29,'Chin 99','Tan Tan 99','ttc1@123.com','0999988888','$2b$10$7QyivlRrLYVsINUijo/Oz.w7qiPi4ctKvQqBBdhjZHVfoEwYNELFe','chinqbhg1234','User'),(33,'Chin','Admin','adt@123.com','0987654321','$2b$10$VGp2wJJObntNjUDvnIq72e1svcTBp.reuuxdlE2zUSMhkTUDKPtYm','admintest123','User'),(35,'Chin','Admin','addddt@123.com','0987654321','$2b$10$NMfdP6CKzP3U4pckgCxaeOuALY9bF17Jv5Rf2YLX65BnKdUA5Bmia','admintssesdt123','User');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vehiclemanagement`
