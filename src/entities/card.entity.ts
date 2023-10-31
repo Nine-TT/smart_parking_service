@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -30,5 +31,6 @@ export class Card {
   updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.cards)
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

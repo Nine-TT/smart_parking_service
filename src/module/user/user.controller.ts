@@ -40,7 +40,7 @@ export class UserController {
 
       if (response === 1) {
         return {
-          statusCode: 409,
+          statusCode: HttpStatus.BAD_REQUEST,
           message: 'Email already exist!',
         };
       }
@@ -87,10 +87,7 @@ export class UserController {
 
   @ApiParam({ name: 'ids', type: 'string' })
   @Delete('/:ids')
-  async deleteUser(@Param('ids') ids: string): Promise<{
-    statusCode: HttpStatus;
-    message: string;
-  }> {
+  async deleteUser(@Param('ids') ids: string) {
     try {
       const idArray = ids.split(',').map((id) => parseInt(id, 10));
 
@@ -99,6 +96,7 @@ export class UserController {
       if (deletedCount != 0) {
         return {
           statusCode: HttpStatus.OK,
+          count: deletedCount,
           message: 'Delete user successful!',
         };
       }
@@ -150,7 +148,8 @@ export class UserController {
       return {
         statusCode: HttpStatus.OK,
         message: 'Get user successful!',
-        Data: response,
+        count: response.count,
+        Data: response.users,
       };
     } catch (error) {
       console.log('ERROR: ', error);
