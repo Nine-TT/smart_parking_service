@@ -8,9 +8,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './module/auth/auth.module';
 import { WebsocketModule } from './module/websocket/websocket.module';
 import { CardModule } from './module/card/card.module';
+import { ParkingLotModule } from './module/parkingLot/parkingLot.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabseModule, UserModule, AuthModule, WebsocketModule, CardModule],
+  imports: [ConfigModule.forRoot(), DatabseModule, UserModule, AuthModule, WebsocketModule, CardModule, ParkingLotModule],
   controllers: [AppController],
   providers: [
     AppService,
