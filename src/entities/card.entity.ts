@@ -2,7 +2,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -15,7 +17,20 @@ export class Card {
   @Column()
   expirationDate: Date;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'id' })
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
+
+  @ManyToOne(() => User, (user) => user.cards)
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

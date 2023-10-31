@@ -4,14 +4,19 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Index,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
-import { Exclude, Expose } from 'class-transformer';
+import { Card } from './card.entity';
+
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'user' })
 @Index('idx_email', ['email'], { unique: true })
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column()
@@ -37,4 +42,20 @@ export class User extends BaseEntity {
 
   @Column()
   phoneNumber: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
+
+  @OneToMany(() => Card, (card) => card.user, { onDelete: 'CASCADE' })
+  cards: Card[];
 }

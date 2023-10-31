@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { userRole } from 'src/constants';
 
 const saltRounds = 10;
 
@@ -17,11 +18,6 @@ export class UserService {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
     return hash;
-  }
-
-  getUsers(requestData: CreateUserDTO): any {
-    console.log(requestData);
-    return 'Get ALL USER';
   }
 
   async createUser(requestData: CreateUserDTO): Promise<any> {
@@ -40,20 +36,15 @@ export class UserService {
     // Tạo một bản sao của requestData để tránh thay đổi dữ liệu gốc
     const newUser = { ...requestData };
 
-    // Hash mật khẩu trước khi lưu vào cơ sở dữ liệu
     newUser.password = await this.hashPassword(requestData.password);
-    newUser.role = newUser.role ? newUser.role : 'User';
+    newUser.role = newUser.role ? newUser.role : userRole.user;
 
-    console.log(typeof newUser.password);
-
-    // Lưu người dùng mới vào cơ sở dữ liệu
     const response = await this.userRepository.save(newUser);
 
-    // Trả về đối tượng User nguyên bản đã lưu vào cơ sở dữ liệu, không bao gồm password
     return response;
   }
 
-  async updateUser(responseData: CreateUserDTO, id: number) {
+  async updateUser(responseData: CreateUserDTO, id: number): Promise<number> {
     const user = await this.userRepository.findOneBy({
       id,
     });
@@ -71,7 +62,7 @@ export class UserService {
     return response.affected;
   }
 
-  async deleteUSerById(ids: number | number[]) {
+  async deleteUSerById(ids: number | number[]): Promise<number> {
     const userIds = Array.isArray(ids) ? ids : [ids];
 
     const deleteResult = await this.userRepository.delete(userIds);
@@ -80,7 +71,7 @@ export class UserService {
     return deletedCount;
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: number): Promise<User | 0> {
     const user = await this.userRepository.findOneBy({
       id,
     });
@@ -92,15 +83,19 @@ export class UserService {
     }
   }
 
-  async getUsersWithCount(page: number, pageSize: number) {
+  async getUsersWithCount({ page, pageSize }) {
     const skip = (page - 1) * pageSize;
-
     // Sử dụng findAndCount để lấy danh sách người dùng và tổng số bản ghi
     const [users, count] = await this.userRepository.findAndCount({
       skip,
       take: pageSize,
     });
 
-    return users;
+    const userData = {
+      users: users,
+      count: count,
+    };
+
+    return userData;
   }
 }
