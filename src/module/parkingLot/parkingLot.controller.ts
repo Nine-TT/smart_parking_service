@@ -22,11 +22,11 @@ import { Roles, userRole } from 'src/constants';
 @Roles(userRole.admin) // role Admin
 @ApiTags('ParkingLot')
 @ApiBearerAuth()
-@Controller('ParkingLot')
+@Controller('parkinglot')
 export class ParkingLotController {
   constructor(private readonly parkingLotService: ParkingLotService) {}
 
-  @Post('/create')
+  @Post('/')
   @ApiBody({ type: ParkingLotDto })
   async createParkingLot(@Body() createParkingLotDTO: ParkingLotDto) {
     try {
@@ -49,7 +49,7 @@ export class ParkingLotController {
     }
   }
 
-  @Put('updateParkingLot/:id')
+  @Put('/:id')
   @ApiParam({ name: 'id', type: 'number' })
   @ApiBody({ type: ParkingLotDto })
   async updateParkingLot(
@@ -82,7 +82,31 @@ export class ParkingLotController {
     }
   }
 
-  @Get('getParkingLot/:id')
+  @ApiParam({ name: 'page', type: Number })
+  @ApiParam({ name: 'pageSize', type: Number })
+  @Get('/all/:page/:pageSize')
+  async getAllUsers(
+    @Param('page') page: number,
+    @Param('pageSize') pageSize: number,
+  ) {
+    try {
+      const response = await this.parkingLotService.getAllParkingLot({
+        page,
+        pageSize,
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Get card successful!',
+        count: response.count,
+        Data: response.parkingLots,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/:id')
   @ApiParam({ name: 'id', type: 'number' })
   async getParkingLotByID(@Param('id') id: number) {
     try {
@@ -108,7 +132,7 @@ export class ParkingLotController {
   }
 
   @ApiParam({ name: 'ids', type: 'string' })
-  @Delete('deleteParkingLot/:ids')
+  @Delete('/:ids')
   async deleteParkingLot(@Param('ids') ids: string) {
     try {
       const idArray = ids.split(',').map((id) => parseInt(id, 10));

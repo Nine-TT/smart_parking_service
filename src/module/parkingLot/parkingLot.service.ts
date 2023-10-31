@@ -31,39 +31,77 @@ export class ParkingLotService {
     responseData: ParkingLotDto,
     id: number,
   ): Promise<number> {
-    const parkingLot = await this.parkingLotRepository.findOneBy({
-      id,
-    });
+    try {
+      const parkingLot = await this.parkingLotRepository.findOneBy({
+        id,
+      });
 
-    if (!parkingLot) {
-      return 0;
+      if (!parkingLot) {
+        return 0;
+      }
+
+      const response = await this.parkingLotRepository.update(id, {
+        name: responseData.name,
+        address: responseData.address,
+      });
+
+      return response.affected;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Internal server error');
     }
+  }
 
-    const response = await this.parkingLotRepository.update(id, {
-      name: responseData.name,
-      address: responseData.address,
-    });
+  async getAllParkingLot({ page, pageSize }) {
+    try {
+      const skip = (page - 1) * pageSize;
 
-    return response.affected;
+      const [parkingLots, count] = await this.parkingLotRepository.findAndCount(
+        {
+          skip,
+          take: pageSize,
+        },
+      );
+
+      const dataParkingLot = {
+        parkingLots: parkingLots,
+        count: count,
+      };
+
+      return dataParkingLot;
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
   }
 
   async getParkingLotById(id: number) {
-    const parkingLot = await this.parkingLotRepository.findOneBy({
-      id,
-    });
-    if (parkingLot) {
-      return parkingLot;
-    } else {
-      return 0;
+    try {
+      const parkingLot = await this.parkingLotRepository.findOneBy({
+        id,
+      });
+      if (parkingLot) {
+        return parkingLot;
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Internal server error');
     }
   }
 
   async deleteParkingLotByID(ids: number | number[]): Promise<number> {
-    const parkingLotIds = Array.isArray(ids) ? ids : [ids];
+    try {
+      const parkingLotIds = Array.isArray(ids) ? ids : [ids];
 
-    const deleteResult = await this.parkingLotRepository.delete(parkingLotIds);
+      const deleteResult =
+        await this.parkingLotRepository.delete(parkingLotIds);
 
-    const deletedCount = deleteResult.affected;
-    return deletedCount;
+      const deletedCount = deleteResult.affected;
+      return deletedCount;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Internal server error');
+    }
   }
 }
