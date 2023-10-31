@@ -83,7 +83,7 @@ export class UserService {
     }
   }
 
-  async getUsersWithCount({ page, pageSize }): Promise<User[]> {
+  async getUsersWithCount({ page, pageSize }) {
     const skip = (page - 1) * pageSize;
     // Sử dụng findAndCount để lấy danh sách người dùng và tổng số bản ghi
     const [users, count] = await this.userRepository.findAndCount({
@@ -91,6 +91,11 @@ export class UserService {
       take: pageSize,
     });
 
-    return users;
+    const userData = {
+      users: users,
+      count: count,
+    };
+
+    return userData;
   }
 }
