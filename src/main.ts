@@ -2,11 +2,25 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import * as http from 'http';
+import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useWebSocketAdapter(
+    new IoAdapter(http.createServer(app.getHttpServer())),
+  );
   app.setGlobalPrefix('api/v1');
+
+  app.use(
+    cors({
+      origin: '*', // Đặt origin của client
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true, // Nếu bạn muốn bao gồm cookies
+    }),
+  );
 
   // swagger
   const config = new DocumentBuilder()
@@ -20,8 +34,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('/', app, document);
-
-  app.enableCors();
 
   await app.listen(process.env.PORT || 3000);
 }
