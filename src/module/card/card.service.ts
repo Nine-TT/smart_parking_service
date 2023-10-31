@@ -16,10 +16,7 @@ export class CardService {
   async createCard(data: CardDto): Promise<any> {
     try {
       const card = await this.cardRepository.save(data);
-      this.soketService.server.emit(
-        'onParkingLotCreated',
-        'create card success',
-      );
+      this.soketService.server.emit('onCardCreated', 'create card success');
       return card;
     } catch (error) {
       console.log(error);
