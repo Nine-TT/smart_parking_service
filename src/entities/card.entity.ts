@@ -11,8 +11,11 @@ import { User } from './user.entity';
 
 @Entity('card')
 export class Card {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
+
+  @Column()
+  cardId: string;
 
   @Column()
   expirationDate: Date;
