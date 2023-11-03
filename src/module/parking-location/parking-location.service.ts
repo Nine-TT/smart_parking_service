@@ -91,49 +91,15 @@ export class ParkingLocationService {
     }
   }
 
-  // async changeParkingLocationState(
-  //   id: number,
-  //   state: string,
-  //   start?: number,
-  //   end?: number,
-  // ) {
-  //   try {
-  //     const response = await this.parkingLocationRepository.findOneBy({
-  //       id,
-  //     });
+  async getAllParkingLocationByFloorId(floorId: number) {
+    try {
+      const parkingLocations = await this.parkingLocationRepository.findBy({
+        floorId: floorId,
+      });
 
-  //     if (
-  //       response &&
-  //       response.state === paking_location_state.empty &&
-  //       (state === paking_location_state.has_vehicle ||
-  //         state === paking_location_state.maintenance)
-  //     ) {
-  //       response.state = state;
-  //       await this.parkingLocationRepository.save(response);
-  //       return 1;
-  //     }
-
-  //     if (
-  //       response &&
-  //       response.state === paking_location_state.empty &&
-  //       (state === paking_location_state.blocked ||
-  //         state === paking_location_state.road)
-  //     ) {
-  //       response.state = state;
-  //       await this.parkingLocationRepository.save(response);
-
-  //       //goi ham sap xep lai ten o
-  //       await this.updateParkingLocationPositions(
-  //         response.floorId,
-  //         response.id,
-  //       );
-
-  //       return 1;
-  //     }
-
-  //     return 0;
-  //   } catch (error) {
-  //     throw new Error('Internal server error');
-  //   }
-  // }
+      return parkingLocations;
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
 }

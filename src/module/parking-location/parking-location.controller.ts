@@ -64,4 +64,25 @@ export class ParkingLocationController {
       };
     }
   }
+
+  @Get('/all/:floorId')
+  @ApiParam({ name: 'floorId', type: 'number' })
+  async getAllParkingLocationByFloorId(@Param('floorId') floorId: number) {
+    try {
+      const response =
+        await this.parkingLocationService.getAllParkingLocationByFloorId(
+          floorId,
+        );
+
+      if (response) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'Get successfully!',
+          data: response,
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
