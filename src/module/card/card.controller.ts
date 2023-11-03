@@ -93,7 +93,7 @@ export class CardController {
   }
 
   @Put('/:id')
-  @ApiParam({ name: 'id', type: 'string' })
+  @ApiParam({ name: 'id', type: 'number' })
   @ApiBody({ type: CardDto })
   async updateCard(@Body() cardDTO: CardDto, @Param() params: any) {
     try {

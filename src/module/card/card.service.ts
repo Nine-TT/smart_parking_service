@@ -58,7 +58,7 @@ export class CardService {
     }
   }
 
-  async updateCard(data: CardDto, id: string) {
+  async updateCard(data: CardDto, id: number) {
     try {
       const card = await this.cardRepository.findOneBy({
         id,
