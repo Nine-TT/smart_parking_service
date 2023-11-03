@@ -9,7 +9,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { ParkingLocationService } from './parking-location.service';
-import { ApiTags, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ParkingLocationDTO } from 'src/dto/parking-location.dto';
 
 @ApiTags('Parking Location')
 @Controller('parking-location')
@@ -42,49 +43,15 @@ export class ParkingLocationController {
     }
   }
 
-  //   @ApiParam({ name: 'id', type: 'number' })
-  //   @Put('/:id')
-  //   async changeParkingLocationState(
-  //     @Param('id') id: number,
-  //     @Body() body: { state: string },
-  //   ) {
-  //     try {
-  //       let state = body.state;
-  //       const response =
-  //         await this.parkingLocationService.changeParkingLocationState(id, state);
-
-  //       if (response === 1) {
-  //         return {
-  //           statusCode: HttpStatus.OK,
-  //           message: 'Update parking location success!',
-  //         };
-  //       } else if (response === 0) {
-  //         return {
-  //           statusCode: HttpStatus.NOT_FOUND,
-  //           message: 'Parking location not found!',
-  //         };
-  //       }
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   }
-
-  @Post('/update')
-  async updateABC(
-    @Body()
-    body: {
-      listblocked?: number[];
-      listRoad?: number[];
-      listEmpty?: number[];
-      floorId?: number;
-    },
-  ) {
+  @Put('')
+  @ApiBody({ type: ParkingLocationDTO })
+  async updateABC(@Body() parkingLocationDTO: ParkingLocationDTO) {
     const response =
       await this.parkingLocationService.changeParkingLocationState(
-        body.listblocked,
-        body.listRoad,
-        body.listEmpty,
-        body.floorId,
+        parkingLocationDTO.listblocked,
+        parkingLocationDTO.listRoad,
+        parkingLocationDTO.listEmpty,
+        parkingLocationDTO.floorId,
       );
 
     if (response === 1) {
