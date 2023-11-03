@@ -19,18 +19,19 @@ export class ParkingLocation {
   id: number;
 
   @ManyToOne(() => Floor)
-  @JoinColumn({ name: 'floor' })
-  floor: Floor;
+  @JoinColumn({ name: 'floorId' })
+  @Column()
+  floorId: number;
 
   @ManyToOne(() => ParkingLot)
   @JoinColumn({ name: 'parking' })
-  parking: ParkingLot;
+  parkinglot: number;
 
   @Column()
   location: number;
 
   @Column()
-  state: string;
+  state: String;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -45,10 +46,10 @@ export class ParkingLocation {
   })
   updated_at: Date;
 
-  @Column()
-  vehicle: string;
+  @Column({ nullable: true })
+  vehicleManagementId: string | null;
 
   @ManyToOne(() => VehicleManagement)
-  @JoinColumn({ name: 'vehicle' })
+  @JoinColumn({ name: 'vehicleManagementId' })
   vehicleManagement: VehicleManagement;
 }

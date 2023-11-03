@@ -17,11 +17,11 @@ export class MyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   handleConnection(client: Socket) {
-    console.log(`ID: (${client.id}) connected`);
+    // console.log(`ID: (${client.id}) connected`);
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`ID : ${client.id} disconnected`);
+    // console.log(`ID : ${client.id} disconnected`);
   }
 
   @SubscribeMessage('sendMessageEvents')

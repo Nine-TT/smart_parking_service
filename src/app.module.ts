@@ -9,9 +9,21 @@ import { AuthModule } from './module/auth/auth.module';
 import { WebsocketModule } from './module/websocket/websocket.module';
 import { CardModule } from './module/card/card.module';
 import { ParkingLotModule } from './module/parkingLot/parkingLot.module';
+import { FloorModule } from './module/floor/floor.module';
+import { ParkingLocationModule } from './module/parking-location/parking-location.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabseModule, UserModule, AuthModule, WebsocketModule, CardModule, ParkingLotModule],
+  imports: [
+    ConfigModule.forRoot(),
+    DatabseModule,
+    UserModule,
+    AuthModule,
+    WebsocketModule,
+    CardModule,
+    ParkingLotModule,
+    FloorModule,
+    ParkingLocationModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
