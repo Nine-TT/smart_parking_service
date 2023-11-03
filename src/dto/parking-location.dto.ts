@@ -13,3 +13,11 @@ export class ParkingLocationDTO {
   @ApiProperty()
   floorId?: number;
 }
+
+export class AddNewParkingLocationDTO {
+  @ApiProperty()
+  floorId: number;
+
+  @ApiProperty()
+  quantity: number;
+}
