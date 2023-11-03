@@ -19,6 +19,9 @@ export class Floor {
   @Column()
   name: string;
 
+  @Column()
+  row: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -34,9 +37,10 @@ export class Floor {
 
   @ManyToOne(() => ParkingLot, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'parkingLot' })
-  parkingLot: ParkingLot;
+  @Column()
+  parkingLot: number;
 
-  @OneToMany(() => ParkingLocation, (location) => location.floor, {
+  @OneToMany(() => ParkingLocation, (location) => location.floorId, {
     onDelete: 'CASCADE',
   })
   locations: ParkingLocation[];
