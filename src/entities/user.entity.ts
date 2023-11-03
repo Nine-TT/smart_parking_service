@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
+  @Column()
+  imageUrl: string;
+
   @Column('varchar', {
     length: 15,
   })
