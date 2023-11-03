@@ -13,3 +13,11 @@ export const userRole = {
 };
 
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
+
+export const paking_location_state = {
+  empty: 'EMPTY',
+  blocked: 'BLOCKED',
+  has_vehicle: 'HAS_VEHICLE',
+  maintenance: 'MAINTENANCE',
+  road: 'ROAD',
+};
