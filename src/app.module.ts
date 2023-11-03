@@ -11,6 +11,7 @@ import { CardModule } from './module/card/card.module';
 import { ParkingLotModule } from './module/parkingLot/parkingLot.module';
 import { FloorModule } from './module/floor/floor.module';
 import { ParkingLocationModule } from './module/parking-location/parking-location.module';
+import { FileHandlingModule } from './util/file/fileHandle.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ParkingLocationModule } from './module/parking-location/parking-locatio
     ParkingLotModule,
     FloorModule,
     ParkingLocationModule,
+    FileHandlingModule,
   ],
   controllers: [AppController],
   providers: [
