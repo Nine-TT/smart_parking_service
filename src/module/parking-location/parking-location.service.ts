@@ -102,4 +102,45 @@ export class ParkingLocationService {
       throw new Error('Internal server error');
     }
   }
+
+  async addNewParkingLocation(floorId: number, quantity: number) {
+    try {
+      const parkingLocations = await this.parkingLocationRepository.find({
+        where: {
+          floorId,
+        },
+        order: {
+          id: 'ASC',
+        },
+      });
+
+      const parkingLocationNew = [];
+      let lastLocation = parkingLocations[parkingLocations.length - 1].location;
+
+      console.log(parkingLocations[parkingLocations.length - 1]);
+
+      if (parkingLocations) {
+        for (let i = 0; i < quantity; i++) {
+          const parkingLocation = this.parkingLocationRepository.create({
+            floorId: floorId,
+            parkinglot: parkingLocations.pop().parkinglot,
+            location: lastLocation + 1,
+            state: paking_location_state.empty,
+            vehicleManagementId: null,
+          });
+
+          lastLocation++;
+          parkingLocationNew.push(parkingLocation);
+        }
+
+        await this.parkingLocationRepository.save(parkingLocationNew);
+
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
 }
