@@ -2,41 +2,61 @@ import { Injectable } from '@nestjs/common';
 import { Card } from 'src/entities/card.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CardDto } from 'src/dto/card.dto';
-import { MyGateway } from '../websocket/event.gateway';
+import { CardDto, UpdateCardDTO } from 'src/dto/card.dto';
 
 @Injectable()
 export class CardService {
   constructor(
     @InjectRepository(Card)
     private readonly cardRepository: Repository<Card>,
-    private readonly soketService: MyGateway,
   ) {}
 
+  // viết lại hàm tạo thẻ với truyền vào là 1 danh sách cardId?
   async createCard(data: CardDto): Promise<any> {
     try {
-      const card = await this.cardRepository.save(data);
-      this.soketService.server.emit('onCardCreated', 'create card success');
-      return card;
+      let listCards = [];
+
+      for (const element of data.cardId) {
+        const existingCard = await this.cardRepository.findOneBy({
+          cardId: element,
+        });
+
+        if (!existingCard) {
+          const card = {
+            cardId: element,
+            state: true,
+            isMonthlyTicket: false,
+          };
+
+          listCards.push(card);
+        }
+      }
+
+      if (listCards.length > 0) {
+        const cardSave = await this.cardRepository.save(listCards);
+        return cardSave;
+      } else {
+        return [];
+      }
     } catch (error) {
       console.log(error);
       throw new Error('Internal server error');
     }
   }
 
-  async getCardById(id: string) {
-    try {
-      const card = await this.cardRepository
-        .createQueryBuilder('card')
-        .leftJoinAndSelect('card.user', 'user')
-        .where('card.id = :id', { id })
-        .getOne();
+  // async getCardById(id: string) {
+  //   try {
+  //     const card = await this.cardRepository
+  //       .createQueryBuilder('card')
+  //       .leftJoinAndSelect('card.user', 'user')
+  //       .where('card.id = :id', { id })
+  //       .getOne();
 
-      return card;
-    } catch (error) {
-      throw new Error('Internal server error');
-    }
-  }
+  //     return card;
+  //   } catch (error) {
+  //     throw new Error('Internal server error');
+  //   }
+  // }
 
   async getAllCard({ page, pageSize }) {
     try {
@@ -58,7 +78,7 @@ export class CardService {
     }
   }
 
-  async updateCard(data: CardDto, id: number) {
+  async updateCard(data: UpdateCardDTO, id: number) {
     try {
       const card = await this.cardRepository.findOneBy({
         id,
@@ -67,11 +87,9 @@ export class CardService {
       if (!card) {
         return 0;
       } else {
-        card.expirationDate = data.expirationDate;
-
-        if (data.userId !== undefined) {
-          card.user.id = data.userId;
-        }
+        card.cardId = data.cardId;
+        card.state = data.state;
+        card.isMonthlyTicket = data.isMonthlyTicket;
 
         const response = await this.cardRepository.save(card);
 

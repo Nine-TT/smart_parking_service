@@ -11,14 +11,14 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
 import { CardService } from './card.service';
-import { CardDto } from 'src/dto/card.dto';
+import { CardDto, UpdateCardDTO } from 'src/dto/card.dto';
 import { RolesGuard } from 'src/middleware/roles.guard';
 import { AuthGuard } from 'src/middleware/auth.guard';
 import { Roles, userRole } from 'src/constants';
 
-@UseGuards(AuthGuard) // check token
-@UseGuards(RolesGuard) // check role
-@Roles(userRole.admin) // role Admin
+// @UseGuards(AuthGuard) // check token
+// @UseGuards(RolesGuard) // check role
+// @Roles(userRole.admin) // role Admin
 @ApiTags('Card')
 @Controller('card')
 export class CardController {
@@ -46,27 +46,27 @@ export class CardController {
     }
   }
 
-  @Get('/:id')
-  @ApiParam({ name: 'id', type: 'string' })
-  async getCardByID(@Param('id') id: string) {
-    try {
-      const response = await this.cardService.getCardById(id);
+  // @Get('/:id')
+  // @ApiParam({ name: 'id', type: 'string' })
+  // async getCardByID(@Param('id') id: string) {
+  //   try {
+  //     const response = await this.cardService.getCardById(id);
 
-      if (response) {
-        return {
-          statusCode: HttpStatus.OK,
-          Data: response,
-        };
-      } else {
-        return {
-          statusCode: HttpStatus.OK,
-          Data: response,
-        };
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
+  //     if (response) {
+  //       return {
+  //         statusCode: HttpStatus.OK,
+  //         Data: response,
+  //       };
+  //     } else {
+  //       return {
+  //         statusCode: HttpStatus.OK,
+  //         Data: response,
+  //       };
+  //     }
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   @ApiParam({ name: 'page', type: Number })
   @ApiParam({ name: 'pageSize', type: Number })
@@ -94,8 +94,8 @@ export class CardController {
 
   @Put('/:id')
   @ApiParam({ name: 'id', type: 'number' })
-  @ApiBody({ type: CardDto })
-  async updateCard(@Body() cardDTO: CardDto, @Param() params: any) {
+  @ApiBody({ type: UpdateCardDTO })
+  async updateCard(@Body() cardDTO: UpdateCardDTO, @Param() params: any) {
     try {
       let cardID = params.id;
       const response = await this.cardService.updateCard(cardDTO, cardID);

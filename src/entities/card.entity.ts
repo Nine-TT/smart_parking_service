@@ -18,7 +18,10 @@ export class Card {
   cardId: string;
 
   @Column()
-  expirationDate: Date;
+  state: boolean;
+
+  @Column()
+  isMonthlyTicket: boolean;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -32,8 +35,4 @@ export class Card {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
-
-  @ManyToOne(() => User, (user) => user.cards)
-  @JoinColumn({ name: 'userId' })
-  user: User;
 }

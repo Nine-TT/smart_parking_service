@@ -53,3 +53,11 @@ export class LoginDTO {
   @IsNotEmpty()
   readonly password: string;
 }
+
+export class UpdateAvatarDTO {
+  @ApiProperty()
+  folderName: string;
+
+  @ApiProperty()
+  userId: number;
+}

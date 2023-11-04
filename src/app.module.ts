@@ -11,6 +11,9 @@ import { CardModule } from './module/card/card.module';
 import { ParkingLotModule } from './module/parkingLot/parkingLot.module';
 import { FloorModule } from './module/floor/floor.module';
 import { ParkingLocationModule } from './module/parking-location/parking-location.module';
+import { MonthlyTicketRequest } from './entities/monthly_ticket_request.entity';
+import { MonthlyTicket } from './entities/monthly_ticket.entity';
+import { UploadFile } from './util/upload-file';
 
 @Module({
   imports: [
@@ -23,6 +26,8 @@ import { ParkingLocationModule } from './module/parking-location/parking-locatio
     ParkingLotModule,
     FloorModule,
     ParkingLocationModule,
+    MonthlyTicketRequest,
+    MonthlyTicket,
   ],
   controllers: [AppController],
   providers: [
@@ -31,6 +36,7 @@ import { ParkingLocationModule } from './module/parking-location/parking-locatio
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
+    UploadFile,
   ],
 })
 export class AppModule {}
