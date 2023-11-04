@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { extname } from 'path';
 import * as fs from 'fs';
 const path = require('path');
+import 'dotenv/config';
 
-@Injectable()
-export class FileHandlingService {
-  async uploadFile(file: Express.Multer.File): Promise<string> {
+export class UploadFile {
+  async uploadFile(
+    file: Express.Multer.File,
+    folderName: string,
+  ): Promise<string> {
     const fileName = `${uuid()}${extname(file.originalname)}`;
-    const dDrivePath = 'D:/';
-    const customFolderPath = 'uploads/';
+    const dDrivePath = process.env.PATH_ROOT;
+    const customFolderPath = `${folderName}/`;
     const fullPath = `${dDrivePath}${customFolderPath}`;
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath, { recursive: true });
@@ -19,12 +21,14 @@ export class FileHandlingService {
 
     fs.writeFileSync(filePath, file.buffer);
 
-    return `${fileName}`;
+    return `${folderName}/${fileName}`;
   }
 
   async downloadFile(url: string): Promise<Buffer | null> {
     try {
-      const filePath = 'D:/' + 'uploads/' + url;
+      const filePath = process.env.PATH_ROOT + url;
+
+      console.log(filePath);
       return fs.readFileSync(filePath);
     } catch (error) {
       return null;
