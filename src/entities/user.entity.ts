@@ -59,6 +59,6 @@ export class User extends BaseEntity {
   })
   updated_at: Date;
 
-  @OneToMany(() => Card, (card) => card.user, { onDelete: 'CASCADE' })
-  cards: Card[];
+  // @OneToMany(() => Card, (card) => card.user, { onDelete: 'CASCADE' })
+  // cards: Card[];
 }

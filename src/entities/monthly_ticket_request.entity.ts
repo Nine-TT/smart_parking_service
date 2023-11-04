@@ -1,6 +1,6 @@
 import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 
-@Entity('MonthlyTicketRequest')
+@Entity('monthly_ticket_request')
 export class MonthlyTicketRequest {
   @PrimaryGeneratedColumn('increment')
   id: number;

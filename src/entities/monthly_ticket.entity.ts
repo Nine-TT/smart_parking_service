@@ -2,29 +2,32 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
+import { User } from './user.entity';
 
-@Entity('reevenue')
-export class Reevenue {
+@Entity('monthly_ticket')
+export class MonthlyTicket {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column()
   cardId: string;
 
-  @Column()
-  type: string;
+  @Column({ nullable: true })
+  userId: number;
 
   @Column()
-  expense: number;
+  licensePlates: string;
 
   @Column()
-  parkingLotId: number;
+  RegistrationDate: Date;
 
   @Column()
-  date: Date;
+  expirationDate: Date;
 
   @CreateDateColumn({
     type: 'timestamp',
