@@ -51,7 +51,7 @@ export class ParkingLocationService {
           parkingLocations[i].state === paking_location_state.road
         ) {
           continue;
-        } else if (parkingLocations[i].state === paking_location_state.empty) {
+        } else {
           parkingLocations[i].location = x;
           x++;
         }
