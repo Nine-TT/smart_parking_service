@@ -7,6 +7,8 @@ import { ParkingLocation } from 'src/entities/parking_location.enity';
 import { ParkingLot } from 'src/entities/parking_lot.enity';
 import { Reevenue } from 'src/entities/revenue.entity';
 import { VehicleManagement } from 'src/entities/vehicle_management.entity';
+import { MonthlyTicketRequest } from 'src/entities/monthly_ticket_request.entity';
+import { MonthlyTicket } from 'src/entities/monthly_ticket.entity';
 import 'dotenv/config';
 
 @Module({
@@ -26,6 +28,8 @@ import 'dotenv/config';
         ParkingLocation,
         Floor,
         Reevenue,
+        MonthlyTicketRequest,
+        MonthlyTicket,
       ],
       synchronize: true,
     }),

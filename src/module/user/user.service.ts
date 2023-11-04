@@ -5,13 +5,17 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { userRole } from 'src/constants';
+import { UploadFile } from 'src/util/upload-file';
 
 const saltRounds = 10;
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @Inject(UploadFile)
+    private readonly uploadFile: UploadFile,
   ) {}
 
   private async hashPassword(password: string): Promise<string> {
@@ -71,10 +75,12 @@ export class UserService {
     return deletedCount;
   }
 
-  async getUserById(id: number): Promise<User | 0> {
+  async getUserById(id: number) {
     const user = await this.userRepository.findOneBy({
       id,
     });
+
+    console.log(this.uploadFile.downloadFile(user.imageUrl));
 
     if (user) {
       return user;
@@ -97,5 +103,32 @@ export class UserService {
     };
 
     return userData;
+  }
+
+  async updateAvatar(
+    file: Express.Multer.File,
+    folderName: string,
+    userId: number,
+  ) {
+    try {
+      const user = await this.userRepository.findOneBy({
+        id: userId,
+      });
+
+      console.log(user);
+
+      if (user) {
+        const imgUrl = await this.uploadFile.uploadFile(file, folderName);
+        user.imageUrl = imgUrl;
+        await this.userRepository.save(user);
+
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('Internal server error');
+    }
   }
 }

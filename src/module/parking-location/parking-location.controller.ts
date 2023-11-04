@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { ParkingLocationService } from './parking-location.service';
 import { ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
-import { ParkingLocationDTO } from 'src/dto/parking-location.dto';
+import {
+  ParkingLocationDTO,
+  AddNewParkingLocationDTO,
+} from 'src/dto/parking-location.dto';
 
 @ApiTags('Parking Location')
 @Controller('parking-location')
@@ -79,6 +82,31 @@ export class ParkingLocationController {
           statusCode: HttpStatus.OK,
           message: 'Get successfully!',
           data: response,
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Post('')
+  @ApiBody({ type: AddNewParkingLocationDTO })
+  async addNewParkinglocation(@Body() addNewDTO: AddNewParkingLocationDTO) {
+    try {
+      const response = await this.parkingLocationService.addNewParkingLocation(
+        addNewDTO.floorId,
+        addNewDTO.quantity,
+      );
+
+      if (response != 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'Add successfully!',
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'FloorId not found!',
         };
       }
     } catch (error) {

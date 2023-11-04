@@ -27,11 +27,17 @@ export class VehicleManagement {
   @Column()
   licensePlates: string;
 
+  @Column()
+  licensePlatesImageUrl: string;
+
   @Column({ type: 'int', nullable: true })
   parkingFee: number;
 
   @Column()
   state: string;
+
+  @Column()
+  parkingLotId: number;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -3,13 +3,19 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CardDto {
   @ApiProperty()
+  cardId: string[];
+}
+
+export class UpdateCardDTO {
+  @ApiProperty()
+  @IsOptional()
   cardId: string;
 
   @ApiProperty()
-  expirationDate: Date;
+  @IsOptional()
+  state: boolean;
 
   @ApiProperty()
-  @ApiPropertyOptional()
   @IsOptional()
-  userId?: number;
+  isMonthlyTicket: boolean;
 }
