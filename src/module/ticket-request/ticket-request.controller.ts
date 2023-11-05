@@ -1,5 +1,13 @@
-import { Controller, HttpStatus, Post, Body, Put, Get } from '@nestjs/common';
-import { ApiTags, ApiBody } from '@nestjs/swagger';
+import {
+  Controller,
+  HttpStatus,
+  Post,
+  Body,
+  Put,
+  Get,
+  Param,
+} from '@nestjs/common';
+import { ApiTags, ApiBody, ApiParam } from '@nestjs/swagger';
 import { TicketRequestService } from './ticket-request.service';
 import {
   TicketRequestDTO,
@@ -66,6 +74,23 @@ export class TicketRequestController {
         return {
           statusCode: HttpStatus.NOT_FOUND,
           data: [],
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/:id')
+  @ApiParam({ name: 'id', type: 'number' })
+  async getRequestByUserId(@Param('id') id: number) {
+    try {
+      const response = await this.requestService.getRequestByUserId(id);
+
+      if (response) {
+        return {
+          statusCode: HttpStatus.OK,
+          data: response,
         };
       }
     } catch (error) {
