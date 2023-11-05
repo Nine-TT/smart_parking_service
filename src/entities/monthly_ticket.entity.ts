@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -23,10 +24,10 @@ export class MonthlyTicket {
   @Column()
   licensePlates: string;
 
-  @Column()
-  RegistrationDate: Date;
+  @Column({ type: 'date' })
+  registrationDate: Date;
 
-  @Column()
+  @Column({ type: 'date' })
   expirationDate: Date;
 
   @CreateDateColumn({
@@ -41,4 +42,10 @@ export class MonthlyTicket {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @OneToOne(() => User, (user) => user.id, {
+    cascade: true, // Thêm CASCADE DELETE vào mối quan hệ
+  })
+  @JoinColumn()
+  user: User;
 }

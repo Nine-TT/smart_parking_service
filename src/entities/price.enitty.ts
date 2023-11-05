@@ -2,29 +2,23 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
   JoinColumn,
+  ManyToOne,
+  UpdateDateColumn,
+  CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { Card } from './card.entity';
 
-@Entity('reevenue')
-export class Reevenue {
+@Entity('price')
+export class Price {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column()
-  cardId: string;
+  key: string;
 
   @Column()
-  type: string;
-
-  @Column()
-  expense: number;
-
-  @Column({ nullable: true })
-  parkingLotId: number;
+  price: number;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -38,8 +32,6 @@ export class Reevenue {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
-
-  @ManyToOne(() => Card)
-  @JoinColumn({ name: 'cardId' })
-  card: Card;
 }
+
+// hoan thien entity -> viet api tao ve thang -> quet the

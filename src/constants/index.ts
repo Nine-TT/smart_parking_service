@@ -21,3 +21,9 @@ export const paking_location_state = {
   maintenance: 'MAINTENANCE',
   road: 'ROAD',
 };
+
+export const ticket_type = {
+  monthlyTicket: 'MONTHLY',
+  regularDayTicket: 'REGULAR_DAY',
+  regularNightTicket: 'REGULAR_NIGHT',
+};

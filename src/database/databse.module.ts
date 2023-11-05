@@ -9,6 +9,7 @@ import { Reevenue } from 'src/entities/revenue.entity';
 import { VehicleManagement } from 'src/entities/vehicle_management.entity';
 import { MonthlyTicketRequest } from 'src/entities/monthly_ticket_request.entity';
 import { MonthlyTicket } from 'src/entities/monthly_ticket.entity';
+import { Price } from 'src/entities/price.enitty';
 import 'dotenv/config';
 
 @Module({
@@ -30,6 +31,7 @@ import 'dotenv/config';
         Reevenue,
         MonthlyTicketRequest,
         MonthlyTicket,
+        Price,
       ],
       synchronize: true,
     }),
