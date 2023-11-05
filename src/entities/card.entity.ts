@@ -3,11 +3,15 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
+import { MonthlyTicket } from './monthly_ticket.entity';
+import { Reevenue } from './revenue.entity';
 
 @Entity('card')
 export class Card {
@@ -35,4 +39,15 @@ export class Card {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @OneToOne(() => MonthlyTicket, (monthlyTicket) => monthlyTicket.cardId, {
+    cascade: true,
+  })
+  @JoinColumn()
+  monthlyTicket: MonthlyTicket;
+
+  @OneToMany(() => Reevenue, (reevenue) => reevenue.cardId, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  reevenues: Reevenue[];
 }

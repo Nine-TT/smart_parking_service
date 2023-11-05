@@ -7,9 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
-import { Card } from './card.entity';
+import { MonthlyTicket } from './monthly_ticket.entity';
 
 import { Exclude } from 'class-transformer';
 
@@ -58,7 +60,4 @@ export class User extends BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
-
-  // @OneToMany(() => Card, (card) => card.user, { onDelete: 'CASCADE' })
-  // cards: Card[];
 }

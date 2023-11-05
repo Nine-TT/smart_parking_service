@@ -13,7 +13,10 @@ import { FloorModule } from './module/floor/floor.module';
 import { ParkingLocationModule } from './module/parking-location/parking-location.module';
 import { MonthlyTicketRequest } from './entities/monthly_ticket_request.entity';
 import { MonthlyTicket } from './entities/monthly_ticket.entity';
+import { Price } from './entities/price.enitty';
 import { UploadFile } from './util/upload-file';
+import { TicketRequestModule } from './module/ticket-request/ticket-request.module';
+import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.module';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { UploadFile } from './util/upload-file';
     ParkingLocationModule,
     MonthlyTicketRequest,
     MonthlyTicket,
+    Price,
+    TicketRequestModule,
+    MonthlyTicketModule,
   ],
   controllers: [AppController],
   providers: [

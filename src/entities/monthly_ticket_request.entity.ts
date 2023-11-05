@@ -7,4 +7,10 @@ export class MonthlyTicketRequest {
 
   @Column()
   userId: number;
+
+  @Column()
+  licensePlates: string;
+
+  @Column()
+  isAccept: boolean;
 }
