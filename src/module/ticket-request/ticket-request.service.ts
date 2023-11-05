@@ -125,4 +125,16 @@ export class TicketRequestService {
       throw new Error('Internal server error');
     }
   }
+
+  async getRequestByUserId(id: number) {
+    try {
+      const request = await this.requestTicketRepository.findOneBy({
+        userId: id,
+      });
+
+      return request;
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
 }
