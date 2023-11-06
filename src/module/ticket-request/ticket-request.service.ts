@@ -116,11 +116,12 @@ export class TicketRequestService {
 
   async getAllTicketRequest() {
     try {
-      const requestAll = await this.requestTicketRepository.findBy({
-        isAccept: false,
+      // Lấy tất cả các yêu cầu với isAccept: false
+      const requests = await this.requestTicketRepository.find({
+        where: { isAccept: false },
+        relations: ['user'], // Sử dụng tên quan hệ đã đặt trong entity MonthlyTicketRequest
       });
-
-      return requestAll;
+      return requests;
     } catch (error) {
       throw new Error('Internal server error');
     }
