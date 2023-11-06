@@ -1,4 +1,11 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import {
+  Column,
+  PrimaryGeneratedColumn,
+  Entity,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity('monthly_ticket_request')
 export class MonthlyTicketRequest {
@@ -13,4 +20,8 @@ export class MonthlyTicketRequest {
 
   @Column()
   isAccept: boolean;
+
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'userId' }) // Liên kết theo trường userId
+  user: User;
 }
