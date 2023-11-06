@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateUserDTO } from 'src/dto/user.dto';
-import { Repository } from 'typeorm';
+import { Repository, Equal } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -80,8 +80,6 @@ export class UserService {
       id,
     });
 
-    console.log(this.uploadFile.downloadFile(user.imageUrl));
-
     if (user) {
       return user;
     } else {
@@ -91,8 +89,28 @@ export class UserService {
 
   async getUsersWithCount({ page, pageSize }) {
     const skip = (page - 1) * pageSize;
-    // Sử dụng findAndCount để lấy danh sách người dùng và tổng số bản ghi
     const [users, count] = await this.userRepository.findAndCount({
+      where: {
+        role: Equal(userRole.user),
+      },
+      skip,
+      take: pageSize,
+    });
+
+    const userData = {
+      users: users,
+      count: count,
+    };
+
+    return userData;
+  }
+
+  async getUsersWithCountRoleManager({ page, pageSize }) {
+    const skip = (page - 1) * pageSize;
+    const [users, count] = await this.userRepository.findAndCount({
+      where: {
+        role: Equal(userRole.manager),
+      },
       skip,
       take: pageSize,
     });
@@ -114,8 +132,6 @@ export class UserService {
       const user = await this.userRepository.findOneBy({
         id: userId,
       });
-
-      console.log(user);
 
       if (user) {
         const imgUrl = await this.uploadFile.uploadFile(file, folderName);

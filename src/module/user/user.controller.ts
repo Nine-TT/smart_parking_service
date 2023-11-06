@@ -161,6 +161,31 @@ export class UserController {
     }
   }
 
+  @ApiParam({ name: 'page', type: Number })
+  @ApiParam({ name: 'pageSize', type: Number })
+  @Get('/all/manager/:page/:pageSize')
+  async getAllManager(
+    @Param('page') page: number,
+    @Param('pageSize') pageSize: number,
+  ) {
+    try {
+      const response = await this.userService.getUsersWithCountRoleManager({
+        page,
+        pageSize,
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Get user successful!',
+        count: response.count,
+        Data: response.users,
+      };
+    } catch (error) {
+      console.log('ERROR: ', error);
+      throw error;
+    }
+  }
+
   @Patch('/avatar')
   @ApiBody({ type: UpdateAvatarDTO })
   @UseInterceptors(FileInterceptor('file'))
