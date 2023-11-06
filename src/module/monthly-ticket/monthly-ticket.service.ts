@@ -160,4 +160,16 @@ export class MonthlyTicketService {
       throw new Error('Internal server error');
     }
   }
+
+  async getTicketByUserId(id: number) {
+    try {
+      const ticket = await this.ticketRepository.findOneBy({
+        userId: id,
+      });
+
+      return ticket;
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
 }
