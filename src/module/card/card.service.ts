@@ -63,6 +63,9 @@ export class CardService {
       const skip = (page - 1) * pageSize;
 
       const [cards, count] = await this.cardRepository.findAndCount({
+        where: {
+          isMonthlyTicket: false,
+        },
         skip,
         take: pageSize,
       });
