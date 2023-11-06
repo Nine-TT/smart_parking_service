@@ -112,4 +112,19 @@ export class MonthlyTicketController {
       throw error;
     }
   }
+
+  @Get('/:userId')
+  @ApiParam({ name: 'userId', type: 'number' })
+  async getTicketByUserId(@Param('userId') userId: number) {
+    try {
+      const response = await this.ticketService.getTicketByUserId(userId);
+
+      return {
+        statusCode: HttpStatus.OK,
+        data: response,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
