@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 
 import { MonthlyTicket } from './monthly_ticket.entity';
+import { MonthlyTicketRequest } from './monthly_ticket_request.entity';
 
 import { Exclude } from 'class-transformer';
 
@@ -60,4 +61,7 @@ export class User extends BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @OneToOne((type) => MonthlyTicketRequest, (request) => request.user)
+  request: MonthlyTicketRequest;
 }
