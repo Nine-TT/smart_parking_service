@@ -93,8 +93,9 @@ export class ParkingLocationService {
 
   async getAllParkingLocationByFloorId(floorId: number) {
     try {
-      const parkingLocations = await this.parkingLocationRepository.findBy({
-        floorId: floorId,
+      const parkingLocations = await this.parkingLocationRepository.find({
+        where: { floorId: floorId },
+        relations: ['vehicleManagement'],
       });
 
       return parkingLocations;
