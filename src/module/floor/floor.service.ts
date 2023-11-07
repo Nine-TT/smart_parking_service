@@ -44,7 +44,6 @@ export class FloorService {
 
       return savedFloor;
     } catch (error) {
-      console.log(error);
       throw new Error('Internal server error');
     }
   }
@@ -57,7 +56,6 @@ export class FloorService {
 
       return floors;
     } catch (error) {
-      console.log(error);
       throw new Error('Internal server error');
     }
   }
@@ -78,7 +76,6 @@ export class FloorService {
 
       return response.affected;
     } catch (error) {
-      console.log(error);
       throw new Error('Internal server error');
     }
   }

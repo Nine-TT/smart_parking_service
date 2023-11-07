@@ -17,6 +17,7 @@ import { Price } from './entities/price.enitty';
 import { UploadFile } from './util/upload-file';
 import { TicketRequestModule } from './module/ticket-request/ticket-request.module';
 import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.module';
+import { CarParkEntryControlModule } from './module/car-park-entry-control/car-park-entry-control.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.modu
     Price,
     TicketRequestModule,
     MonthlyTicketModule,
+    CarParkEntryControlModule,
   ],
   controllers: [AppController],
   providers: [

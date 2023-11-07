@@ -37,4 +37,12 @@ export class MyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   onCardCreated(card: any) {
     this.server.emit('onCardCreated', card);
   }
+
+  onCarParked(data: any) {
+    this.server.emit('onParked', data);
+  }
+
+  onCarMove(data: any) {
+    this.server.emit('onMove', data);
+  }
 }

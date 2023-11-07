@@ -31,7 +31,7 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ nullable: true })
   imageUrl: string;
 
   @Column('varchar', {
