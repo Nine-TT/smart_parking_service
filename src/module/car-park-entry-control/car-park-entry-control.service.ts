@@ -86,17 +86,9 @@ export class CarParkEntryControlService {
       });
 
       if (vehicleManagement) {
-        await this.vehicleRepository.update(
-          {
-            licensePlates: data.licensePlates,
-            state: vehicle_type.move,
-            timeOut: null,
-          },
-          {
-            state: vehicle_type.parked,
-            parkingLocationId: data.parkingLocationId,
-          },
-        );
+        vehicleManagement.state = vehicle_type.parked;
+        vehicleManagement.parkingLocationId = data.parkingLocationId;
+        await this.vehicleRepository.save(vehicleManagement);
 
         await this.parkingLocationRepository.update(
           { id: data.parkingLocationId },
