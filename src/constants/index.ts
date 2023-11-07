@@ -27,3 +27,9 @@ export const ticket_type = {
   regularDayTicket: 'REGULAR_DAY',
   regularNightTicket: 'REGULAR_NIGHT',
 };
+
+export const vehicle_type = {
+  move: 'MOVE',
+  parked: 'PARKED',
+  done: 'DONE',
+};

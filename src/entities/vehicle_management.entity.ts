@@ -8,10 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Card } from './card.entity';
+import { ParkingLot } from './parking_lot.enity';
+import { ParkingLocation } from './parking_location.enity';
 
 @Entity('vehiclemanagement')
 export class VehicleManagement {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment')
   id: string;
 
   @ManyToOne(() => Card, { onDelete: 'CASCADE' })
@@ -39,6 +41,12 @@ export class VehicleManagement {
   @Column()
   parkingLotId: number;
 
+  @Column({ nullable: true })
+  floorId: number;
+
+  @Column({ nullable: true })
+  parkingLocationId: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -51,4 +59,12 @@ export class VehicleManagement {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @ManyToOne(() => ParkingLot) // Đặt quan hệ Many-to-One với ParkingLot
+  @JoinColumn({ name: 'parkingLotId' }) // Chọn trường liên kết với parkingLotId
+  parkingLot: ParkingLot;
+
+  @ManyToOne(() => ParkingLocation) // Đặt quan hệ Many-to-One với ParkingLocation
+  @JoinColumn({ name: 'parkingLocationId' }) // Chọn trường liên kết với parkingLocationId
+  parkingLocation: ParkingLocation;
 }
