@@ -33,10 +33,6 @@ export class UserService {
       return 1;
     }
 
-    if (existingRecord) {
-      return 1;
-    }
-
     // Tạo một bản sao của requestData để tránh thay đổi dữ liệu gốc
     const newUser = { ...requestData };
 
