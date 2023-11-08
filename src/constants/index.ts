@@ -24,6 +24,7 @@ export const paking_location_state = {
 
 export const ticket_type = {
   monthlyTicket: 'MONTHLY',
+  regularTicket: 'REGULAR',
   regularDayTicket: 'REGULAR_DAY',
   regularNightTicket: 'REGULAR_NIGHT',
 };
