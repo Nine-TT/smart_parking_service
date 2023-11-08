@@ -63,7 +63,7 @@ export class VehicleManagementService {
         where: {
           state: Equal(state),
         },
-        relations: ['floor', 'parkingLocation', 'parkingLot'],
+        relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
         skip,
         take: pageSize,
       });
