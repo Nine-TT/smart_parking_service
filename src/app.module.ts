@@ -18,8 +18,6 @@ import { UploadFile } from './util/upload-file';
 import { TicketRequestModule } from './module/ticket-request/ticket-request.module';
 import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.module';
 import { CarParkEntryControlModule } from './module/car-park-entry-control/car-park-entry-control.module';
-import { RevenueModule } from './module/revenue/revenue.module';
-import { VehicleManagementModule } from './module/vehicle-management/vehicle-management.module';
 
 @Module({
   imports: [
@@ -38,8 +36,6 @@ import { VehicleManagementModule } from './module/vehicle-management/vehicle-man
     TicketRequestModule,
     MonthlyTicketModule,
     CarParkEntryControlModule,
-    RevenueModule,
-    VehicleManagementModule,
   ],
   controllers: [AppController],
   providers: [
