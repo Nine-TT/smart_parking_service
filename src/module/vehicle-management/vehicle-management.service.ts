@@ -27,7 +27,7 @@ export class VehicleManagementService {
             state: Equal(state),
             parkingLotId: parkingLotId,
           },
-          relations: ['floor', 'parkingLocation', 'parkingLot'],
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
           skip,
           take: pageSize,
         });
@@ -46,7 +46,7 @@ export class VehicleManagementService {
             parkingLotId: parkingLotId,
             floorId: floorId,
           },
-          relations: ['floor', 'parkingLocation', 'parkingLot'],
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
           skip,
           take: pageSize,
         });
@@ -63,7 +63,7 @@ export class VehicleManagementService {
         where: {
           state: Equal(state),
         },
-        relations: ['floor', 'parkingLocation', 'parkingLot'],
+        relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
         skip,
         take: pageSize,
       });
