@@ -23,6 +23,7 @@ export class CreateUserDTO {
   readonly password: string;
 
   @IsOptional()
+  @ApiProperty()
   readonly role?: string;
 
   @ApiProperty()

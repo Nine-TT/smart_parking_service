@@ -10,6 +10,7 @@ import {
 import { Card } from './card.entity';
 import { ParkingLot } from './parking_lot.enity';
 import { ParkingLocation } from './parking_location.enity';
+import { Floor } from './floor.entity';
 
 @Entity('vehiclemanagement')
 export class VehicleManagement {
@@ -67,4 +68,8 @@ export class VehicleManagement {
   @ManyToOne(() => ParkingLocation) // Đặt quan hệ Many-to-One với ParkingLocation
   @JoinColumn({ name: 'parkingLocationId' }) // Chọn trường liên kết với parkingLocationId
   parkingLocation: ParkingLocation;
+
+  @ManyToOne(() => Floor) // Đặt quan hệ Many-to-One với ParkingLocation
+  @JoinColumn({ name: 'floorId' }) // Chọn trường liên kết với parkingLocationId
+  floor: Floor;
 }

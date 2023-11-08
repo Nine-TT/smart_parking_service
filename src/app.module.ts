@@ -19,7 +19,6 @@ import { TicketRequestModule } from './module/ticket-request/ticket-request.modu
 import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.module';
 import { CarParkEntryControlModule } from './module/car-park-entry-control/car-park-entry-control.module';
 import { PriceModule } from './module/Price/price.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot(),

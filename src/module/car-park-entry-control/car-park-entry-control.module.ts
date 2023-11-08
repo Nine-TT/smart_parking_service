@@ -9,6 +9,7 @@ import { Price } from 'src/entities/price.enitty';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UploadFile } from 'src/util/upload-file';
 import { ParkingLocation } from 'src/entities/parking_location.enity';
+import { Floor } from 'src/entities/floor.entity';
 import { MyGateway } from '../websocket/event.gateway';
 
 @Module({
@@ -20,6 +21,7 @@ import { MyGateway } from '../websocket/event.gateway';
       MonthlyTicket,
       Price,
       ParkingLocation,
+      Floor,
     ]),
   ],
   controllers: [CarParkEntryControlController],
