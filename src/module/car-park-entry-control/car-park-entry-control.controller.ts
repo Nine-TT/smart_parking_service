@@ -32,15 +32,39 @@ export class CarParkEntryControlController {
     try {
       const response = await this.vehicleService.vehicleSwipeIn(data, file);
 
-      if (response != 0) {
+      if (response === 1) {
         return {
           statusCode: HttpStatus.OK,
+          isMonthlyticket: false,
           message: 'Car is move in park!',
         };
-      } else {
+      } else if (response === 2) {
+        return {
+          statusCode: HttpStatus.OK,
+          isMonthlyticket: true,
+          message: 'Car is move in park!',
+        };
+      } else if (response === 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: 'Card is locked!',
+        };
+      } else if (response === 3) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          isMonthlyticket: true,
+          message: 'No matching license plates!',
+        };
+      } else if (response === 4) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          isMonthlyticket: true,
+          message: 'Monthly ticket expires!',
+        };
+      } else if (response === 5) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'The card has a vehicle in use that has not left the lot!',
         };
       }
     } catch (error) {
@@ -59,6 +83,11 @@ export class CarParkEntryControlController {
           statusCode: HttpStatus.OK,
           message: 'Car is parked!',
         };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Vehicle not found!',
+        };
       }
     } catch (error) {
       throw error;
@@ -76,6 +105,11 @@ export class CarParkEntryControlController {
           statusCode: HttpStatus.OK,
           message: 'Car is moving out!',
         };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Vehicle not found!',
+        };
       }
     } catch (error) {
       throw error;
@@ -85,6 +119,29 @@ export class CarParkEntryControlController {
   @Put('/out')
   @ApiBody({ type: VehicleOut })
   async checkOutDone(@Body() data: VehicleOut) {
-    const response = await this.vehicleService.vehicleIsOutDone(data);
+    try {
+      const response = await this.vehicleService.vehicleIsOutDone(data);
+
+      if (response === 1) {
+        return {
+          statusCode: HttpStatus.OK,
+          cardIsMonthly: true,
+          message: 'The car has left the gate',
+        };
+      } else if (response === 2) {
+        return {
+          statusCode: HttpStatus.OK,
+          cardIsMonthly: false,
+          message: 'The car has left the gate',
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Bad request!',
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }

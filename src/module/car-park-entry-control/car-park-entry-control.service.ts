@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, Equal } from 'typeorm';
+import { Repository, Equal, IsNull, And } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Card } from 'src/entities/card.entity';
 import { VehicleManagement } from 'src/entities/vehicle_management.entity';
@@ -7,6 +7,9 @@ import { MonthlyTicket } from 'src/entities/monthly_ticket.entity';
 import { Price } from 'src/entities/price.enitty';
 import { Reevenue } from 'src/entities/revenue.entity';
 import { ParkingLocation } from 'src/entities/parking_location.enity';
+import { Floor } from 'src/entities/floor.entity';
+import * as moment from 'moment';
+
 import {
   SwipeIn,
   ParkedDTO,
@@ -41,6 +44,9 @@ export class CarParkEntryControlService {
     @InjectRepository(ParkingLocation)
     private readonly parkingLocationRepository: Repository<ParkingLocation>,
 
+    @InjectRepository(Floor)
+    private readonly floorRepository: Repository<Floor>,
+
     private readonly uploadFile: UploadFile,
 
     private readonly socketServer: MyGateway,
@@ -52,27 +58,79 @@ export class CarParkEntryControlService {
         cardId: data.cardId,
       });
 
+      // const vehicleManagement = await this.vehicleRepository.find({
+      //   where: { },
+      // });
+
+      // console.log(vehicleManagement);
+
+      // if (vehicleManagement) {
+      //   return 5;
+      // }
+
       // const checkState = await this.vehicleRepository.find
 
+      // neu ve thang thi kiem tra han va bien so
       const imgUrl = await this.uploadFile.uploadFile(file, data.folderName);
 
       if (card.state === true) {
-        const vehicle = this.vehicleRepository.create({
-          timeIn: data.timeIn,
-          licensePlates: data.licensePlates,
-          card: card,
-          state: vehicle_type.move,
-          parkingLotId: data.parkingLotId,
-          licensePlatesImageUrl: imgUrl,
-        });
+        if (card.isMonthlyTicket === true) {
+          const monhtlyTicket = await this.ticketRepository.findOneBy({
+            cardId: card.cardId,
+          });
 
-        await this.vehicleRepository.save(vehicle);
+          if (monhtlyTicket.licensePlates != data.licensePlates) {
+            return 3;
+          }
 
-        return 1;
+          console.log(
+            moment(monhtlyTicket.expirationDate).isAfter(
+              moment(data.timeIn),
+              'day',
+            ),
+          );
+
+          if (
+            moment(monhtlyTicket.expirationDate).isAfter(
+              moment(data.timeIn),
+              'day',
+            )
+          ) {
+            return 4;
+          }
+
+          const vehicle = this.vehicleRepository.create({
+            timeIn: data.timeIn,
+            licensePlates: data.licensePlates,
+            card: card,
+            state: vehicle_type.move,
+            parkingFee: 0,
+            parkingLotId: data.parkingLotId,
+            licensePlatesImageUrl: imgUrl,
+          });
+
+          await this.vehicleRepository.save(vehicle);
+
+          return 2;
+        } else if (card.isMonthlyTicket === false) {
+          const vehicle = this.vehicleRepository.create({
+            timeIn: data.timeIn,
+            licensePlates: data.licensePlates,
+            card: card,
+            state: vehicle_type.move,
+            parkingLotId: data.parkingLotId,
+            licensePlatesImageUrl: imgUrl,
+          });
+
+          await this.vehicleRepository.save(vehicle);
+
+          return 1;
+        }
       }
 
       return 0;
     } catch (error) {
+      console.log(error);
       throw new Error('Internal server error');
     }
   }
@@ -85,9 +143,18 @@ export class CarParkEntryControlService {
         timeOut: null,
       });
 
+      const parkinglocation = await this.parkingLocationRepository.findOneBy({
+        id: data.parkingLocationId,
+      });
+
+      const floor = await this.floorRepository.findOneBy({
+        id: parkinglocation.floorId,
+      });
+
       if (vehicleManagement) {
         vehicleManagement.state = vehicle_type.parked;
         vehicleManagement.parkingLocationId = data.parkingLocationId;
+        vehicleManagement.floorId = floor.id;
         await this.vehicleRepository.save(vehicleManagement);
 
         await this.parkingLocationRepository.update(
@@ -150,10 +217,6 @@ export class CarParkEntryControlService {
 
   async vehicleIsOutDone(data: VehicleOut) {
     try {
-      const now = new Date();
-      const isoStringNow = now.toISOString();
-      console.log(isoStringNow);
-
       const card = await this.cardRepository.findOneBy({
         cardId: data.cardId,
       });
@@ -164,41 +227,142 @@ export class CarParkEntryControlService {
         timeOut: null,
       });
 
-      // const timeIn = vehicleManagement.timeIn;
-      // const timeOut = data.timeOut;
+      if (vehicleManagement.state != vehicle_type.done) {
+        if (card && card.isMonthlyTicket === true && vehicleManagement) {
+          vehicleManagement.state = vehicle_type.done;
+          vehicleManagement.timeOut = data.timeOut;
+          vehicleManagement.parkingFee = 0;
+          await this.vehicleRepository.save(vehicleManagement);
 
-      // if (vehicleManagement) {
-      //   vehicleManagement.timeOut = data.timeOut;
-      //   vehicleManagement.state = vehicle_type.done;
+          return 1;
+        } else if (
+          card &&
+          card.isMonthlyTicket === false &&
+          vehicleManagement
+        ) {
+          let priceDay = await this.priceRepository.findOneBy({
+            key: ticket_type.regularDayTicket,
+          });
 
-      //   await this.vehicleRepository.save(vehicleManagement);
+          let priceNight = await this.priceRepository.findOneBy({
+            key: ticket_type.regularNightTicket,
+          });
 
-      //   // tao doanh thu ----> check thoi gian xem neu ban ngay thi tinh tien ngay, neu qua dem thi tinh tien dem, neu 2-3 ngay thi tinh tien 2-3 ngay
-      //   let price = await this.priceRepository.findOneBy({
-      //     key: ticket_type.monthlyTicket,
-      //   });
+          let timeIn = vehicleManagement.timeIn;
+          let timeOut = data.timeOut;
 
-      //   const reevenue = this.reevenueRepository.create({
-      //     type: ticket_type.monthlyTicket,
-      //     expense: price.price,
-      //     parkingLotId: null,
-      //     card: card,
-      //   });
+          let totalMoney = this.calculateParkingFee(
+            timeIn,
+            timeOut,
+            priceDay.price,
+            priceNight.price,
+          );
 
-      //   await this.reevenueRepository.save(reevenue);
+          vehicleManagement.state = vehicle_type.done;
+          vehicleManagement.timeOut = data.timeOut;
+          vehicleManagement.parkingFee = totalMoney;
+          await this.vehicleRepository.save(vehicleManagement);
 
-      //   let socketData = {
-      //     message: 'Xe da do vao cho!',
-      //     parkingLotId: vehicleManagement.parkingLotId,
-      //   };
-      //   this.socketServer.server.emit('onParked', socketData);
+          // toa doanh thu bang reevenue
 
-      //   return 1;
-      // }
+          const reevenue = this.reevenueRepository.create({
+            type: ticket_type.regularTicket,
+            expense: totalMoney,
+            parkingLotId: vehicleManagement.parkingLotId,
+            card: card,
+          });
+
+          await this.reevenueRepository.save(reevenue);
+
+          return 2;
+        }
+      }
 
       return 0;
     } catch (error) {
+      console.log(error);
       throw new Error('Internal server error');
     }
+  }
+
+  calculateParkingFee(timeIn, timeOut, dayMoney, nightMoney) {
+    let timeInNoTime = this.formattedDay(timeIn);
+    let timeOutNoTime = this.formattedDay(timeOut);
+
+    let timeInFomat = moment(timeInNoTime);
+    let timeOutFomat = moment(timeOutNoTime);
+
+    const sixAMIn = moment(timeIn).set({
+      hour: 6,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+    const sixPMIn = moment(timeIn).set({
+      hour: 18,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    const sixAMOut = moment(timeOut).set({
+      hour: 6,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    const sixPMOut = moment(timeOut).set({
+      hour: 18,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    let dayNumber = timeOutFomat.diff(timeInFomat, 'days');
+
+    let isDayIn =
+      moment(timeIn).isAfter(sixAMIn) && moment(timeIn).isBefore(sixPMIn);
+
+    let isDayOut =
+      moment(timeOut).isAfter(sixAMOut) && moment(timeOut).isBefore(sixPMOut);
+
+    if (!isDayIn && moment(timeIn).hours() > 0 && moment(timeIn).hours() < 6) {
+      dayNumber += 1;
+    }
+
+    if (
+      !isDayIn &&
+      moment(timeOut).hours() > 0 &&
+      moment(timeOut).hours() < 6
+    ) {
+      dayNumber -= 1;
+    }
+
+    // console.log('check day:', dayNumber);
+
+    // console.log('===========> is day in:', isDayIn);
+    // console.log('===========> is day out:', isDayOut);
+
+    // console.log(dayMoney, nightMoney);
+
+    if (isDayIn && isDayOut) {
+      return dayNumber * (dayMoney + nightMoney) + dayMoney;
+    } else if (isDayIn && !isDayOut) {
+      return dayNumber * (dayMoney + nightMoney);
+    } else if (!isDayIn && isDayOut) {
+      return dayNumber * (dayMoney + nightMoney);
+    } else if (!isDayIn && !isDayOut) {
+      return dayNumber * (dayMoney + nightMoney) + nightMoney;
+    }
+  }
+
+  formattedDay(timeIn) {
+    const time = new Date(timeIn);
+    const year = time.getFullYear();
+    const month = (time.getMonth() + 1).toString().padStart(2, '0'); // Thêm số 0 trước tháng
+    const day = time.getDate().toString().padStart(2, '0'); // Thêm số 0 trước ngày
+
+    return `${year}-${month}-${day}`;
   }
 }
