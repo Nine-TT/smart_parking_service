@@ -137,7 +137,7 @@ export class CarParkEntryControlService {
           message: 'Xe dang di chuyen trong bai!',
           parkingLotId: vehicleManagement.parkingLotId,
         };
-        this.socketServer.server.emit('onMove', socketData);
+        this.socketServer.server.emit('onParked', socketData);
 
         return 1;
       }
