@@ -19,6 +19,7 @@ import { TicketRequestModule } from './module/ticket-request/ticket-request.modu
 import { MonthlyTicketModule } from './module/monthly-ticket/monthly-ticket.module';
 import { CarParkEntryControlModule } from './module/car-park-entry-control/car-park-entry-control.module';
 import { PriceModule } from './module/Price/price.module';
+import { VehicleManagementModule } from './module/vehicle-management/vehicle-management.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -37,6 +38,7 @@ import { PriceModule } from './module/Price/price.module';
     MonthlyTicketModule,
     CarParkEntryControlModule,
     PriceModule,
+    VehicleManagementModule,
   ],
   controllers: [AppController],
   providers: [
