@@ -34,6 +34,23 @@ export class RevenueService {
         }
 
         return yearlyTotal;
+      } else if (year === undefined && type) {
+        const revenues = await this.revenueRepository.find({
+          where: { type: type },
+        });
+
+        const yearlyTotal = {};
+
+        for (const revenue of revenues) {
+          const year = revenue.created_at.getFullYear();
+          if (yearlyTotal[year]) {
+            yearlyTotal[year] += revenue.expense;
+          } else {
+            yearlyTotal[year] = revenue.expense;
+          }
+        }
+
+        return yearlyTotal;
       }
     } catch (error) {
       throw new Error('Internal server error');
