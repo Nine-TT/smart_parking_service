@@ -1,10 +1,6 @@
-import {
-  Controller,
-  HttpStatus,
-  Get,
-    
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, HttpStatus, Get, Patch, Body } from '@nestjs/common';
+import { ApiTags, ApiBody } from '@nestjs/swagger';
+import { PriceDto } from 'src/dto/price.dto';
 import { PriceService } from './price.service';
 
 @ApiTags('price')
@@ -24,6 +20,28 @@ export class PriceController {
         return {
           statusCode: HttpStatus.NOT_FOUND,
           data: [],
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Patch('')
+  @ApiBody({ type: PriceDto })
+  async updatePrice(@Body() data: PriceDto) {
+    try {
+      const response = await this.priceService.updatePrice(data);
+
+      if (response != 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'Update successfully!',
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Key not found!',
         };
       }
     } catch (error) {
