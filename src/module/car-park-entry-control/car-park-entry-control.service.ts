@@ -83,18 +83,11 @@ export class CarParkEntryControlService {
             return 3;
           }
 
-          console.log(
-            moment(monhtlyTicket.expirationDate).isAfter(
-              moment(data.timeIn),
-              'day',
-            ),
-          );
-
           if (
-            moment(monhtlyTicket.expirationDate).isAfter(
+            moment(monhtlyTicket.expirationDate).isBefore(
               moment(data.timeIn),
               'day',
-            )
+            ) === true
           ) {
             return 4;
           }

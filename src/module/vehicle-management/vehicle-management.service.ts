@@ -14,14 +14,14 @@ export class VehicleManagementService {
   async getVehicleManagementWithCount(
     page: number,
     pageSize: number,
-    state: string,
+    state?: string,
     parkingLotId?: number,
     floorId?: number,
   ) {
     try {
       const skip = (page - 1) * pageSize;
 
-      if (parkingLotId && floorId === undefined) {
+      if (parkingLotId && floorId === undefined && state) {
         const [vehicle, count] = await this.vehicleRepository.findAndCount({
           where: {
             state: Equal(state),
@@ -37,7 +37,42 @@ export class VehicleManagementService {
           count: count,
         };
         return vehicleManagement;
-      } else if (parkingLotId && floorId) {
+      } else if (parkingLotId && floorId === undefined && state === undefined) {
+        const [vehicle, count] = await this.vehicleRepository.findAndCount({
+          where: {
+            parkingLotId: parkingLotId,
+          },
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
+          skip,
+          take: pageSize,
+        });
+
+        const vehicleManagement = {
+          vehicles: vehicle,
+          count: count,
+        };
+        return vehicleManagement;
+      } else if (parkingLotId && floorId && state) {
+        const skip = (page - 1) * pageSize;
+
+        const [vehicle, count] = await this.vehicleRepository.findAndCount({
+          where: {
+            state: Equal(state),
+            parkingLotId: parkingLotId,
+            floorId: floorId,
+          },
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
+          skip,
+          take: pageSize,
+        });
+
+        const vehicleManagement = {
+          vehicles: vehicle,
+          count: count,
+        };
+
+        return vehicleManagement;
+      } else if (parkingLotId && floorId && state === undefined) {
         const skip = (page - 1) * pageSize;
 
         const [vehicle, count] = await this.vehicleRepository.findAndCount({
@@ -59,20 +94,38 @@ export class VehicleManagementService {
         return vehicleManagement;
       }
 
-      const [vehicle, count] = await this.vehicleRepository.findAndCount({
-        where: {
-          state: Equal(state),
-        },
-        relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
-        skip,
-        take: pageSize,
-      });
+      if (
+        parkingLotId === undefined &&
+        floorId === undefined &&
+        state === undefined
+      ) {
+        const [vehicle, count] = await this.vehicleRepository.findAndCount({
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
+          skip,
+          take: pageSize,
+        });
 
-      const vehicleManagement = {
-        vehicles: vehicle,
-        count: count,
-      };
-      return vehicleManagement;
+        const vehicleManagement = {
+          vehicles: vehicle,
+          count: count,
+        };
+        return vehicleManagement;
+      } else if (parkingLotId === undefined && floorId === undefined && state) {
+        const [vehicle, count] = await this.vehicleRepository.findAndCount({
+          where: {
+            state: Equal(state),
+          },
+          relations: ['floor', 'parkingLocation', 'parkingLot', 'card'],
+          skip,
+          take: pageSize,
+        });
+
+        const vehicleManagement = {
+          vehicles: vehicle,
+          count: count,
+        };
+        return vehicleManagement;
+      }
     } catch (error) {
       console.log(error);
       throw new Error('Internal server error');
