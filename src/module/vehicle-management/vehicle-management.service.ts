@@ -77,7 +77,6 @@ export class VehicleManagementService {
 
         const [vehicle, count] = await this.vehicleRepository.findAndCount({
           where: {
-            state: Equal(state),
             parkingLotId: parkingLotId,
             floorId: floorId,
           },
