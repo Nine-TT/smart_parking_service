@@ -9,14 +9,14 @@ export class VehicleManagementController {
 
   @ApiQuery({ name: 'parkingLotId', type: Number, required: false })
   @ApiQuery({ name: 'floorId', type: Number, required: false })
-  @ApiQuery({ name: 'state', type: String })
+  @ApiQuery({ name: 'state', type: String, required: false })
   @ApiQuery({ name: 'page', type: Number })
   @ApiQuery({ name: 'pageSize', type: Number })
   @Get('/all')
   async getVehicleManagement(
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
-    @Query('state') state: string,
+    @Query('state') state?: string,
     @Query('parkingLotId') parkingLotId?: number,
     @Query('floorId') floorId?: number,
   ) {
